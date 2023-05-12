@@ -1,13 +1,14 @@
 package io.collective;
 
 import java.time.Clock;
+import java.util.Optional;
 
 public class SimpleAgedCache {
 
-    private Option<ExpirableEntry> head;
+    private Optional<ExpirableEntry> head;
 
     public SimpleAgedCache(Clock clock) {
-        this.head = Option.empty()
+        this.head = Optional.empty();
     }
 
     public SimpleAgedCache() {
@@ -32,7 +33,7 @@ public class SimpleAgedCache {
         private Object key;
         private Object value;
         private Clock clock;
-        private Option<ExpirableEntry> next;
+        private Optional<ExpirableEntry> next;
 
         public ExpirableEntry(Object key, Object value, Clock clock) {
             this.key = key;
@@ -40,11 +41,11 @@ public class SimpleAgedCache {
             this.clock = clock;
         }
 
-        public Option<ExpirableEntry> getNext() {
+        public Optional<ExpirableEntry> getNext() {
             return next;
         }
 
-        public void setNext(Option<ExpirableEntry> next) {
+        public void setNext(Optional<ExpirableEntry> next) {
             this.next = next;
         }
 
