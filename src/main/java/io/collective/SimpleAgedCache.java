@@ -23,16 +23,13 @@ public class SimpleAgedCache {
     public void put(Object key, Object value, int retentionInMillis) {
 		// keep calling next until there's a value
 		ExpirableEntry input = new ExpirableEntry(key, value, this.clock, retentionInMillis);
-        if (this.head = null) {
+        if (this.head == null) {
             this.head = input;
             this.tail = input;
             return;
         }
-		var current = this.head;
-		while (current != null) {
-			current = current.getNext();
-		}
-		current = input;
+        this.tail.setNext(input);
+        this.tail = this.tail.getNext();
     }
 
     public boolean isEmpty() {
@@ -47,7 +44,20 @@ public class SimpleAgedCache {
     }
 
     public Object get(Object key) {
-        return null;
+        if (this.head == null) {
+            return null;
+        }
+        var current = this.head;
+        while (current.getKey() != key) {
+            if (current == null) {
+                return null;
+            }
+            current = current.getNext();
+            if (current == null) {
+                return null;
+            }
+        }
+        return current.getValue();
     }
 
 }
