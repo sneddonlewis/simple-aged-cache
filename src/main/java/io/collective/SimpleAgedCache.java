@@ -44,8 +44,11 @@ public class SimpleAgedCache {
 		var current = this.head;
         count++;
         while (current.getNext() != null) {
-            count++;
             current = current.getNext();
+            if (current.isExpired()) {
+                continue;
+            }
+            count++;
         }
         return count;
     }
@@ -63,8 +66,11 @@ public class SimpleAgedCache {
             if (current == null) {
                 return null;
             }
+            if (current.isExpired()) {
+                // remove
+                return null;
+            }
         }
         return current.getValue();
     }
-
 }

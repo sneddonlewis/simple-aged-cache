@@ -1,7 +1,7 @@
 package io.collective;
 
 import java.time.Clock;
-import java.time.Duration;
+import java.time.Instant;
 
 public class ExpirableEntry {
     private Object key;
@@ -9,13 +9,13 @@ public class ExpirableEntry {
     private ExpirableEntry next;
 
     private Clock clock;
-    private int retention;
+    private Instant expiry;
 
     public ExpirableEntry(Object key, Object value, Clock clock, int retentionInMillis) {
         this.key = key;
         this.value = value;
         this.clock = clock;
-        this.retention = retentionInMillis;
+        this.expiry = clock.instant().plusMillis(retentionInMillis);
         this.next = null;
     }
 
@@ -35,7 +35,7 @@ public class ExpirableEntry {
         return value;
     }
 
-    public Clock getClock() {
-        return clock;
+    public boolean isExpired() {
+        return clock.instant().isAfter(expiry);
     }
 }
