@@ -38,9 +38,16 @@ public class SimpleAgedCache {
 
     public int size() {
 		int count = 0;
+        if (this.head == null) {
+            return 0;
+        }
 		var current = this.head;
-		// traverse collection and increment for every item present and non expired
-        return 0;
+        count++;
+        while (current.getNext() != null) {
+            count++;
+            current = current.getNext();
+        }
+        return count;
     }
 
     public Object get(Object key) {
