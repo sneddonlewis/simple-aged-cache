@@ -1,27 +1,48 @@
 package io.collective;
 
 import java.time.Clock;
-import java.util.Optional;
 
 public class SimpleAgedCache {
 
-    private Optional<ExpirableEntry> head;
+	private Clock clock;
+    private ExpirableEntry head;
+    private ExpirableEntry tail;
 
     public SimpleAgedCache(Clock clock) {
-        this.head = Optional.empty();
+        this.head = null;
+        this.tail = this.head;
+		this.clock = clock;
     }
 
     public SimpleAgedCache() {
+        this.head = null;
+        this.tail = this.head;
+		this.clock = Clock.systemUTC();
     }
 
     public void put(Object key, Object value, int retentionInMillis) {
+		// keep calling next until there's a value
+		ExpirableEntry input = new ExpirableEntry(key, value, this.clock, retentionInMillis);
+        if (this.head = null) {
+            this.head = input;
+            this.tail = input;
+            return;
+        }
+		var current = this.head;
+		while (current != null) {
+			current = current.getNext();
+		}
+		current = input;
     }
 
     public boolean isEmpty() {
-        return false;
+        return this.head == null;
     }
 
     public int size() {
+		int count = 0;
+		var current = this.head;
+		// traverse collection and increment for every item present and non expired
         return 0;
     }
 
@@ -29,36 +50,4 @@ public class SimpleAgedCache {
         return null;
     }
 
-    class ExpirableEntry {
-        private Object key;
-        private Object value;
-        private Clock clock;
-        private Optional<ExpirableEntry> next;
-
-        public ExpirableEntry(Object key, Object value, Clock clock) {
-            this.key = key;
-            this.value = value;
-            this.clock = clock;
-        }
-
-        public Optional<ExpirableEntry> getNext() {
-            return next;
-        }
-
-        public void setNext(Optional<ExpirableEntry> next) {
-            this.next = next;
-        }
-
-        public Object getKey() {
-            return key;
-        }
-
-        public Object getValue() {
-            return value;
-        }
-
-        public Clock getClock() {
-            return clock;
-        }
-    }
 }
